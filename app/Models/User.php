@@ -27,6 +27,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'last_vote_date',
+        'vote_match_id'
     ];
 
     /**
