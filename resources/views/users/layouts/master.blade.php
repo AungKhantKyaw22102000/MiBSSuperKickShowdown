@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" href="images/favicon.png">
+    <link rel="icon" href="{{ asset('user/images/favicon.png') }}">
     <title>@yield('title')</title>
 
     <link rel="stylesheet" href="{{ asset('user/css/materialize.css') }}">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="col s6">
                     <div class="content-center">
-                        <a href="index.php"><img src="images/logo2.webp" style="margin-top: -10px;" alt="MiBS"></a>
+                        <a href="index.php"><img src="{{ asset('user/images/logo2.webp') }}" style="margin-top: -10px;" alt="MiBS"></a>
                     </div>
                 </div>
                 <div class="col s3">
@@ -48,28 +48,28 @@
         <ul id="slide-out" class="collapsible side-nav">
             <li>
                 <div class="user-view">
-                    <img class="circle responsive-img" src="images/madlab.png" alt="">
+                    <img class="circle responsive-img" src="{{ asset('user/images/madlab.png') }}" alt="">
                     <h5>MadLab</h5>
                     <span>Developer</span>
                 </div>
             </li>
             <li>
-                <a href="{{ route('') }}">Schedule</a>
+                <a href="">Schedule</a>
             </li>
             <li>
-                <a href="{{ route('') }}">Results</a>
+                <a href="">Results</a>
             </li>
             <li>
-                <a href="{{ route('') }}">Standings</a>
+                <a href="">Standings</a>
             </li>
             <li>
-                <a href="{{ route('') }}">Stats</a>
+                <a href="">Stats</a>
             </li>
             <li>
-                <a href="{{ route('') }}">Players</a>
+                <a href="">Players</a>
             </li>
             <li>
-                <a href="{{ route('') }}">Gallery</a>
+                <a href="">Gallery</a>
             </li>
             <li>
                 <div class="collapsible-header">
@@ -77,15 +77,15 @@
                 </div>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="{{ route('') }}">Sign In</a></li>
-                        <li><a href="{{ route('') }}">Sign Up</a></li>
-                        <li><a href="{{ route('') }}">Settings</a></li>
-                        <li><a href="{{ route('') }}">Verify Mail</a></li>
+                        <li><a href="">Sign In</a></li>
+                        <li><a href="">Sign Up</a></li>
+                        <li><a href="">Settings</a></li>
+                        <li><a href="">Verify Mail</a></li>
                     </ul>
                 </div>
             </li>
             <li>
-                <a href="{{ route('') }}">Log Out</a>
+                <a href="">Log Out</a>
             </li>
         </ul>
     </div>

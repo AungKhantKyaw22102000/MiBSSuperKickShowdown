@@ -7305,6 +7305,7 @@ input[type=range]:focus::-ms-fill-upper {
 .side-nav li {
   float: none;
   line-height: 48px;
+  margin-left: 10px;
 }
 
 .side-nav li.active {

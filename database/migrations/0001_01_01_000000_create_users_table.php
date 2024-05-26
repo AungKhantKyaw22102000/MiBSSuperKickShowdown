@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('image')->nullable();
             $table->string('role')->default('user');
             $table->date('last_vote_date')->nullable();
             $table->integer('vote_match_id')->nullable();
