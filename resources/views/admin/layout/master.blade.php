@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('user/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/css/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -54,22 +55,16 @@
                 </div>
             </li>
             <li>
-                <a href="">Schedule</a>
+                <a href="{{ route('admin#clubList') }}">Club List</a>
             </li>
             <li>
-                <a href="">Results</a>
+                <a href="{{ route('admin#footballMatchList') }}">Match List</a>
             </li>
             <li>
-                <a href="">Standings</a>
+                <a href="{{ route('admin#playerList') }}">Player List</a>
             </li>
             <li>
-                <a href="">Stats</a>
-            </li>
-            <li>
-                <a href="">Players</a>
-            </li>
-            <li>
-                <a href="">Gallery</a>
+                <a href="{{ route('admin#galleryList') }}">Gallery</a>
             </li>
             <li>
                 <div class="collapsible-header">
@@ -77,13 +72,18 @@
                 </div>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="">Sign In</a></li>
-                        <li><a href="">Sign Up</a></li>
-                        <li><a href="">Settings</a></li>
-                        <li><a href="">Verify Mail</a></li>
+                        @guest
+                            <li><a href="{{ route('auth#loginPage') }}">Sign In</a></li>
+                            <li><a href="{{ route('auth#registerPage') }}">Sign Up</a></li>
+                        @endguest
+                        @auth
+                            <li><a href="">Settings</a></li>
+                            <li><a href="">Verify Mail</a></li>
+                        @endauth
                     </ul>
                 </div>
             </li>
+            @auth
             <li>
                 <form action="{{ route('logout') }}" method="post">
                     @csrf
@@ -96,6 +96,7 @@
                     </div>
                 </form>
             </li>
+            @endauth
         </ul>
     </div>
     <!-- end sidebar -->

@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::create('clubs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('club_photo');
-            $table->integer('played_match');
-            $table->integer('win');
-            $table->integer('draw');
-            $table->integer('lose');
-            $table->integer('goal_for');
-            $table->integer('goal_against');
-            $table->integer('goal_difference');
-            $table->integer('points');
-            $table->integer('yellow_card');
-            $table->integer('red_card');
+            $table->string('club_photo')->nullable();
+            $table->integer('played_match')->nullable()->default(0);
+            $table->integer('win')->nullable()->default(0);
+            $table->integer('draw')->nullable()->default(0);
+            $table->integer('lose')->nullable()->default(0);
+            $table->integer('goal_for')->nullable()->default(0);
+            $table->integer('goal_against')->nullable()->default(0);
+            $table->integer('goal_difference')->nullable()->default(0);
+            $table->integer('points')->nullable()->default(0);
+            $table->integer('yellow_card')->nullable()->default(0);
+            $table->integer('red_card')->nullable()->default(0);
             $table->timestamps();
         });
     }

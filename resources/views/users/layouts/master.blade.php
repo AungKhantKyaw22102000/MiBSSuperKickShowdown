@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('user/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/css/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -54,22 +55,22 @@
                 </div>
             </li>
             <li>
-                <a href="">Schedule</a>
+                <a href="{{ route('user#matchPage') }}">Schedule</a>
             </li>
             <li>
-                <a href="">Results</a>
+                <a href="{{ route('user#resultPage') }}">Results</a>
             </li>
             <li>
-                <a href="">Standings</a>
+                <a href="{{ route('user#homePage') }}">Standings</a>
             </li>
             <li>
-                <a href="">Stats</a>
+                <a href="{{ route('user#statsPage') }}">Stats</a>
             </li>
             <li>
-                <a href="">Players</a>
+                <a href="{{ route('user#playerPage') }}">Players</a>
             </li>
             <li>
-                <a href="">Gallery</a>
+                <a href="{{ route('user#blogPage') }}">Gallery</a>
             </li>
             <li>
                 <div class="collapsible-header">
@@ -77,16 +78,31 @@
                 </div>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="">Sign In</a></li>
-                        <li><a href="">Sign Up</a></li>
-                        <li><a href="">Settings</a></li>
-                        <li><a href="">Verify Mail</a></li>
+                        @guest
+                            <li><a href="{{ route('auth#loginPage') }}">Sign In</a></li>
+                            <li><a href="{{ route('auth#registerPage') }}">Sign Up</a></li>
+                        @endguest
+                        @auth
+                            <li><a href="">Settings</a></li>
+                            <li><a href="">Verify Mail</a></li>
+                        @endauth
                     </ul>
                 </div>
             </li>
+            @auth
             <li>
-                <a href="">Log Out</a>
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-4">
+                            <button class="btn text-white" type="submit">
+                                <i class="fa-solid fa-right-from-bracket"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </li>
+            @endauth
         </ul>
     </div>
     <!-- end sidebar -->

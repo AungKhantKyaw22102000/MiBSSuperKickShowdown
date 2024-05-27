@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->date('play_date');
             $table->time('play_time');
-            $table->tinyInteger('finished');
-            $table->integer('team1_goal');
-            $table->integer('team2_goal');
-            $table->integer('team1_yellow_card');
-            $table->integer('team2_yellow_card');
-            $table->integer('team1_red_card');
-            $table->integer('team2_red_card');
+            $table->tinyInteger('finished')->nullable();
+            $table->integer('team1_goal')->nullable()->default(0);
+            $table->integer('team2_goal')->nullable()->default(0);
+            $table->integer('team1_yellow_card')->nullable()->default(0);
+            $table->integer('team2_yellow_card')->nullable()->default(0);
+            $table->integer('team1_red_card')->nullable()->default(0);
+            $table->integer('team2_red_card')->nullable()->default(0);
             $table->timestamps();
         });
     }

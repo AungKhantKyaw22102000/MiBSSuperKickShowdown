@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('back_number');
-            $table->integer('goal');
-            $table->integer('assist');
-            $table->string('player_photo');
-            $table->integer('yellow_card');
-            $table->integer('red_card');
+            $table->integer('goal')->nullable()->default(0);
+            $table->integer('assist')->nullable()->default(0);
+            $table->integer('club_id');
+            $table->string('player_photo')->nullable();
+            $table->integer('yellow_card')->nullable()->default(0);
+            $table->integer('red_card')->nullable()->default(0);
             $table->date('date_of_birth');
             $table->timestamps();
         });

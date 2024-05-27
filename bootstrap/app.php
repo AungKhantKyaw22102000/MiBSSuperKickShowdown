@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Middleware\AdminMiddlewareAuth;
-use App\Http\Middleware\UserMiddlewareAuth;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\UserMiddlewareAuth;
+use App\Http\Middleware\AdminMiddlewareAuth;
+use App\Http\Middleware\GuestMiddlewareAuth;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -16,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'admin_auth' => AdminMiddlewareAuth::class,
-            'user_auth' => UserMiddlewareAuth::class
+            'user_auth' => UserMiddlewareAuth::class,
+            'guest' => GuestMiddlewareAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
