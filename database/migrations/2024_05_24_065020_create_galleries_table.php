@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('header');
             $table->string('sub_header');
-            $table->string('briefing');
+            $table->longText('briefing');
             $table->longText('main_text');
             $table->string('first_photo');
             $table->string('second_photo');

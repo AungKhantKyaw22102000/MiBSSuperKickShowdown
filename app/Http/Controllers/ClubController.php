@@ -21,8 +21,8 @@ class ClubController extends Controller
     }
 
     // direct route club detail
-    public function clubDetail(){
-        $club = Club::first();
+    public function clubDetail($id){
+        $club = Club::where('id',$id)->first();
         return view('admin.club.detail', compact('club'));
     }
 
@@ -51,7 +51,7 @@ class ClubController extends Controller
 
         if($request->hasFile('clubPhoto')){
             $oldImageName = Club::where('id',$request->clubId)->first();
-            $oldImageName = $oldImageName->image;
+            $oldImageName = $oldImageName->club_photo;
 
             if($oldImageName != null){
                 Storage::delete('public/clubPhoto/'.$oldImageName);
@@ -66,14 +66,9 @@ class ClubController extends Controller
 
     // delete club
     public function clubDelete($id){
-        // Retrieve the club
         $club = Club::find($id);
-
         if($club){
-            // Delete the associated image file
             Storage::delete('public/clubPhoto/' . $club->club_photo);
-
-            // Delete the club record from the database
             $club->delete();
         }
         return back()->with(['deleteSuccess'=>'Selected Club is Deleted Successfully...']);

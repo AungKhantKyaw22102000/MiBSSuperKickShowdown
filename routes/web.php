@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('detail/{id}', [ClubController::class, 'clubDetail'])->name('admin#clubDetail');
             Route::get('delete/{id}', [ClubController::class, 'clubDelete'])->name('admin#clubDelete');
             Route::get('update/{id}', [ClubController::class, 'clubUpdatePage'])->name('admin#clubUpdatePage');
-            Route::post('udpate', [ClubController::class, 'clubUpdate'])->name('admin#clubUpdate');
+            Route::post('update', [ClubController::class, 'clubUpdate'])->name('admin#clubUpdate');
         });
 
         // Match routes
@@ -50,11 +50,23 @@ Route::middleware(['auth'])->group(function () {
         // Player Routes
         Route::prefix('player')->group(function(){
             Route::get('list', [PlayerController::class, 'playerList'])->name('admin#playerList');
+            Route::get('createPage', [PlayerController::class, 'playerCreatePage'])->name('admin#playerCreatePage');
+            Route::post('create', [PlayerController::class, 'playerCreate'])->name('admin#playerCreate');
+            Route::get('detail/{id}', [PlayerController::class, 'playerDetail'])->name('admin#playerDetail');
+            Route::get('delte/{id}', [PlayerController::class, 'playerDelete'])->name('admin#playerDelete');
+            Route::get('update/{id}', [PlayerController::class, 'playerUpdatePage'])->name('admin#playerUpdatePage');
+            Route::get('update', [PlayerController::class, 'playerUpdate'])->name('admin#playerupdate');
         });
 
         // Gallery Routes
         Route::prefix('gallery')->group(function(){
             Route::get('list', [GalleryController::class, 'galleryList'])->name('admin#galleryList');
+            Route::get('createPage', [GalleryController::class, 'galleryCreatePage'])->name('admin#galleryCreatePage');
+            Route::post('create', [GalleryController::class, 'galleryCreate'])->name('admin#galleryCreate');
+            Route::get('deatil/{id}', [GalleryController::class, 'galleryDetail'])->name('admin#galleryDetail');
+            Route::get('delete/{id}', [GalleryController::class, 'deleteGallery'])->name('admin#deleteGallery');
+            Route::get('update/{id}', [GalleryController::class, 'galleryUpdatePage'])->name('admin#galleryUpdatePage');
+            Route::post('update', [GalleryController::class, 'galleryUpdate'])->name('admin#galleryUpdate');
         });
     });
 

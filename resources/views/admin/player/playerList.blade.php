@@ -6,43 +6,58 @@
     <!-- standing -->
     <div class="standing segments-page">
         <div class="container"><br>
-            <div class="button-container">
-                <a href="schedule.php" class="custom-button" style="--clr:#BC13FE"><span>Schedule</span><i></i></a>
-                <a href="stats.php" class="custom-button" style="--clr:#FFF01F"><span>Statistics</span><i></i></a>
-                <a href="results.php" class="custom-button" style="--clr:#39FF14"><span>Result</span><i></i></a>
-                <a href="players.php" class="custom-button" style="--clr:#FF3131"><span>Player</span><i></i></a>
-                <a href="gallery.php" class="custom-button" style="--clr:#EA00FF"><span>Gallery</span><i></i></a>
+            <div class="button-container ">
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{{ route('admin#playerCreatePage') }}" class="custom-button" style="--clr:#BC13FE"><span class="d-block">Add Player</span><i></i></a>
+                    </div>
+                </div>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>Player ID</th>
                         <th>Name</th>
+                        <th>Photo</th>
                         <th>Club</th>
                         <th>Back Number</th>
-                        <th>Action</th>
+                        <th>Date of Birth</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($players as $p)
                     <tr class='$rowClass'>
-                        <td><a href='club-details.php?viewteam=" . $id ."'><img src='photo/'
-                                    style='width: 20px; height: 20px;'></a></td>
-                        <td>" . $row['pl'] . "</td>
-                        <td>" . $row['draw'] . "</td>
-                        <td></td>
+                        <td>{{ $p->id }}</td>
+                        <td>
+                            <a href="{{ route('admin#playerDetail', $p->id) }}">
+                                {{ $p->name }}
+                            </a>
+                        </td>
+                        <td>
+                            <img src="{{ asset('storage/playerPhoto/'.$p->player_photo) }}" style="width: 100px; height: 100px;" class=" img-thumbnail" alt="{{ $p->name }}">
+                        </td>
+                        <td>{{ $p->club_name }}</td>
+                        <td>{{ $p->back_number}}</td>
+                        <td>{{ $p->date_of_birth }}</td>
                         <td>
                             <div class='btn-group'>
-                                <a class='' href=''>
+                                <a class='' href='{{ route('admin#playerUpdatePage', $p->id) }}'>
                                     <i class='fa-solid fa-pen-to-square' title='Update'></i>
                                 </a>
-                                <a class='' href=''>
+                                <a class='' href='{{ route('admin#playerDelete', $p->id) }}'>
                                     <i class='fa-solid fa-trash-can' title='Delete'></i>
                                 </a>
                             </div>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
+            <div class="mt-3">
+                {{ $players->links() }}
+                {{-- {{ $categories->appends(request()->query())->links() }} --}}
+            </div>
         </div>
     </div>
     <!-- end standing -->

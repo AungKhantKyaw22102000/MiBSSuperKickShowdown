@@ -17,7 +17,7 @@
             <form action="{{ route('admin#clubUpdate') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <input type="hidden" name="clubId" value={{ $club->id }}>
+                    <input type="hidden" name="clubId" value="{{ $club->id }}">
                     <label>Team Name</label>
                     @error('clubNname')
                         <div class="invalid-feedback">

@@ -6,41 +6,42 @@
     <!-- standing -->
     <div class="standing segments-page">
         <div class="container"><br>
-            <div class="button-container">
-                <a href="schedule.php" class="custom-button" style="--clr:#BC13FE"><span>Schedule</span><i></i></a>
-                <a href="stats.php" class="custom-button" style="--clr:#FFF01F"><span>Statistics</span><i></i></a>
-                <a href="results.php" class="custom-button" style="--clr:#39FF14"><span>Result</span><i></i></a>
-                <a href="players.php" class="custom-button" style="--clr:#FF3131"><span>Player</span><i></i></a>
-                <a href="gallery.php" class="custom-button" style="--clr:#EA00FF"><span>Gallery</span><i></i></a>
+            <div class="button-container ">
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{{ route('admin#galleryCreatePage') }}" class="custom-button" style="--clr:#BC13FE"><span class="d-block">Add Blog</span><i></i></a>
+                    </div>
+                </div>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>Gallery ID</th>
                         <th>Header</th>
-                        <th>Briefing</th>
-                        <th>Main Text</th>
-                        <th>Action</th>
+                        <th>Sub Header</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($galleries as $g)
                     <tr class='$rowClass'>
-                        <td><a href='club-details.php?viewteam=" . $id ."'><img src='photo/'
-                                    style='width: 20px; height: 20px;'></a></td>
-                        <td>" . $row['pl'] . "</td>
-                        <td>" . $row['draw'] . "</td>
-                        <td></td>
+                        <td>
+                            {{ $g->id }}
+                        </td>
+                        <td><a href="{{ route('admin#galleryDetail', $g->id) }}">{{ $g->header }}</a></td>
+                        <td>{{ $g->sub_header }}</td>
                         <td>
                             <div class='btn-group'>
-                                <a class='' href=''>
+                                <a class='' href='{{ route('admin#galleryUpdatePage', $g->id) }}'>
                                     <i class='fa-solid fa-pen-to-square' title='Update'></i>
                                 </a>
-                                <a class='' href=''>
+                                <a class='' href='{{ route('admin#deleteGallery', $g->id) }}'>
                                     <i class='fa-solid fa-trash-can' title='Delete'></i>
                                 </a>
                             </div>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -9,7 +9,7 @@
             <div class="button-container ">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('admin#clubCreatePage') }}" class="custom-button" style="--clr:#BC13FE"><span class="d-block">Create Club</span><i></i></a>
+                        <a href="{{ route('admin#clubCreatePage') }}" class="custom-button" style="--clr:#BC13FE"><span class="d-block">Add Club</span><i></i></a>
                     </div>
                 </div>
             </div>
@@ -27,8 +27,11 @@
                     @foreach ($club as $c)
                     <tr class='$rowClass'>
                         <td>{{ $c->id }}</td>
-                        <td><a href='{{ route('admin#clubDetail', $c->id) }}'><img src='{{ asset('storage/clubPhoto/'.$c->club_photo)}}'
-                                    style='width: 20px; height: 20px;' alt="{{ $c->name }}">{{ $c->name }}</a></td>
+                        <td>
+                            <a href='{{ route('admin#clubDetail', $c->id) }}'>
+                                <img src='{{ asset('storage/clubPhoto/'.$c->club_photo)}}' style='width: 20px; height: 20px;' alt="{{ $c->name }}">{{ $c->name }}
+                            </a>
+                        </td>
                         <td>{{ $c->played_match }}</td>
                         <td>{{ $c->points }}</td>
                         <td>
