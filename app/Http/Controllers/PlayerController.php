@@ -37,7 +37,7 @@ class PlayerController extends Controller
     public function playerUpdatePage($id){
         $players = Player::where('id',$id)->first();
         $clubs = Club::get();
-        return view('admin.player.create', compact('clubs','players'));
+        return view('admin.player.update', compact('clubs','players'));
     }
 
     // create player
@@ -64,7 +64,22 @@ class PlayerController extends Controller
 
     // player update
     public function playerUpdate(Request $request){
+        $this->playerValidationCheck($request, 'update');
+        $data = $this->playerRequestData($request);
 
+        if($request->hasFile('playerPhoto')){
+            $oldImageName = Player::where('id',$request->playerId)->first();
+            $oldImageName = $oldImageName->player_photo;
+
+            if($oldImageName != null){
+                Storage::delete('public/playerPhoto/'.$oldImageName);
+            }
+            $fileName = uniqid().$request->file('playerPhoto')->getClientOriginalName();
+            $request->file('playerPhoto')->storeAs('public/playerPhoto',$fileName);
+            $data['player_photo'] = $fileName;
+        }
+        Player::where('id', $request->playerId)->update($data);
+        return redirect()->route('admin#playerList');
     }
 
     // player validation check

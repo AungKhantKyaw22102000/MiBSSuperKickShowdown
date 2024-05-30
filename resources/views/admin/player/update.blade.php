@@ -14,7 +14,7 @@
                 <span onclick="history.back()"><i class="fa-solid fa-backward text-dark"></i> Back</span>
             </div>
         </div>
-        <form action="{{ route('admin#playerCreate') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin#playerUpdate') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label>Name</label>
@@ -23,6 +23,7 @@
                         <p style="color: red">{{ $message }}</p>
                     </div>
                 @enderror
+                <input type="hidden" name="playerId" value="{{ $players->id }}">
                 <input class="form-control @error('playerName') is-invalid @enderror" type="text" name="playerName" value="{{ $players->name }}">
             </div>
             <div class="form-group">
@@ -53,7 +54,7 @@
                 <select name="playerClub" id="" class="form-control @error('playerClub') is-invalid @enderror">
                     <option value="">Choose Club</option>
                     @foreach ($clubs as $c)
-                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                        <option value="{{ $c->id }}" @if($players->club_id == $c->id) selected @endif>{{ $players->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -64,7 +65,7 @@
                         <p style="color: red">{{ $message }}</p>
                     </div>
                 @enderror
-                <input class="form-control @error('playerGoal') is-invalid @enderror" type="number" name="playerGoal" min="0">
+                <input class="form-control @error('playerGoal') is-invalid @enderror" type="number" name="playerGoal" min="0" value="{{ old('playerGoal',$players->goal)}}">
             </div>
             <div class="form-group">
                 <label>Assist</label>
@@ -73,7 +74,7 @@
                         <p style="color: red">{{ $message }}</p>
                     </div>
                 @enderror
-                <input class="form-control @error('playerAssist') is-invalid @enderror" type="number" name="playerAssist" min="0">
+                <input class="form-control @error('playerAssist') is-invalid @enderror" type="number" name="playerAssist" min="0" value="{{ old('playerAssist',$players->assist) }}">
             </div>
             <div class="form-group">
                 <label>Yellow Card</label>
@@ -82,7 +83,7 @@
                         <p style="color: red">{{ $message }}</p>
                     </div>
                 @enderror
-                <input class="form-control @error('playerYellowCard') is-invalid @enderror" type="number" name="playerYellowCard" min="0">
+                <input class="form-control @error('playerYellowCard') is-invalid @enderror" type="number" name="playerYellowCard" min="0" value="{{ old('playerYellowCard', $players->yellow_card) }}">
             </div>
             <div class="form-group">
                 <label>Red Card</label>
@@ -91,7 +92,7 @@
                         <p style="color: red">{{ $message }}</p>
                     </div>
                 @enderror
-                <input class="form-control @error('playerRedCard') is-invalid @enderror" type="number" name="playerRedCard" min="0">
+                <input class="form-control @error('playerRedCard') is-invalid @enderror" type="number" name="playerRedCard" min="0" value="{{ old('playerRedCard', $players->red_card) }}">
             </div>
             <div class="form-group">
                 <label>Date of Birth</label>
@@ -100,7 +101,7 @@
                         <p style="color: red">{{ $message }}</p>
                     </div>
                 @enderror
-                <input class="form-control @error('dateOfBirth') is-invalid @enderror" type="date" name="dateOfBirth">
+                <input class="form-control @error('dateOfBirth') is-invalid @enderror" type="date" name="dateOfBirth" value="{{ old('dateOfBirth', $players->date_of_birth) }}">
             </div>
             <div class="form-group">
                 <button class="btn number-white bg-success" type="submit"><i class="fa-solid fa-plus btn-sm"></i>Create Blog</button>

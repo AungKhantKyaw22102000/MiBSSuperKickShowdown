@@ -61,10 +61,16 @@
                 <a href="{{ route('admin#footballMatchList') }}">Match List</a>
             </li>
             <li>
+                <a href="{{ route('admin#footballMatchResultList') }}">Match Result</a>
+            </li>
+            <li>
                 <a href="{{ route('admin#playerList') }}">Player List</a>
             </li>
             <li>
                 <a href="{{ route('admin#galleryList') }}">Gallery</a>
+            </li>
+            <li>
+                <a href="{{ route('admin#userList') }}">User List</a>
             </li>
             <li>
                 <div class="collapsible-header">
@@ -72,14 +78,7 @@
                 </div>
                 <div class="collapsible-body">
                     <ul>
-                        @guest
-                            <li><a href="{{ route('auth#loginPage') }}">Sign In</a></li>
-                            <li><a href="{{ route('auth#registerPage') }}">Sign Up</a></li>
-                        @endguest
-                        @auth
-                            <li><a href="">Settings</a></li>
-                            <li><a href="">Verify Mail</a></li>
-                        @endauth
+                        <li><a href="{{ route('admin#adminProfile') }}">Settings</a></li>
                     </ul>
                 </div>
             </li>

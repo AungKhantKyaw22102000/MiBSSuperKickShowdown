@@ -18,7 +18,7 @@
                 @csrf
                 <div class="form-group">
                     <label>Team Name</label>
-                    @error('clubNname')
+                    @error('clubName')
                         <div class="invalid-feedback">
                             <p style="color: red">{{ $message }}</p>
                         </div>

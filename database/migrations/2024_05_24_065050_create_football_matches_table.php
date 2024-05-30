@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('play_date');
             $table->time('play_time');
+            $table->integer('team1_id');
+            $table->integer('team2_id');
             $table->tinyInteger('finished')->nullable();
             $table->integer('team1_goal')->nullable()->default(0);
             $table->integer('team2_goal')->nullable()->default(0);

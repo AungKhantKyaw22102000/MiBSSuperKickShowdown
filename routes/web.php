@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClubController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\User\UserController;
@@ -42,9 +43,15 @@ Route::middleware(['auth'])->group(function () {
             Route::post('update', [ClubController::class, 'clubUpdate'])->name('admin#clubUpdate');
         });
 
-        // Match routes
+        // Match Routes
         Route::prefix('footballMatch')->group(function(){
             Route::get('list', [FootballMatchController::class, 'footballMatchList'])->name('admin#footballMatchList');
+            Route::get('createPage', [FootballMatchController::class, 'footballMatchCreatePage'])->name('admin#footballMatchCreatePage');
+            Route::post('create', [FootballMatchController::class, 'footballMatchCreate'])->name('admin#footballMatchCreate');
+            Route::get('delete/{id}', [FootballMatchController::class, 'footballMatchDelete'])->name('admin#footballMatchDelete');
+            Route::get('update/{id}', [FootballMatchController::class, 'footballMatchUpdatePage'])->name('admin#footballMatchUpdatePage');
+            Route::post('update', [FootballMatchController::class, 'footballMatchUpdate'])->name('admin#footballMatchUpdate');
+            Route::get('result', [FootballMatchController::class, 'footballMatchResultList'])->name('admin#footballMatchResultList');
         });
 
         // Player Routes
@@ -55,7 +62,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('detail/{id}', [PlayerController::class, 'playerDetail'])->name('admin#playerDetail');
             Route::get('delte/{id}', [PlayerController::class, 'playerDelete'])->name('admin#playerDelete');
             Route::get('update/{id}', [PlayerController::class, 'playerUpdatePage'])->name('admin#playerUpdatePage');
-            Route::get('update', [PlayerController::class, 'playerUpdate'])->name('admin#playerupdate');
+            Route::post('update', [PlayerController::class, 'playerUpdate'])->name('admin#playerUpdate');
+            Route::get('stats', [PlayerController::class, 'playerStats'])->name('admin#playerStats');
         });
 
         // Gallery Routes
@@ -67,6 +75,18 @@ Route::middleware(['auth'])->group(function () {
             Route::get('delete/{id}', [GalleryController::class, 'deleteGallery'])->name('admin#deleteGallery');
             Route::get('update/{id}', [GalleryController::class, 'galleryUpdatePage'])->name('admin#galleryUpdatePage');
             Route::post('update', [GalleryController::class, 'galleryUpdate'])->name('admin#galleryUpdate');
+        });
+
+        // Users Routes
+        Route::prefix('users')->group(function(){
+            Route::get('list', [AdminController::class, 'userList'])->name('admin#userList');
+            Route::get('delete/{id}', [AdminController::class, 'userDelete'])->name('admin#userDelete');
+            Route::get('detail/{id}', [AdminController::class, 'userDetail'])->name('admin#userDetail');
+        });
+
+        // profile routes
+        Route::prefix('profile')->group(function(){
+            Route::get('adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile');
         });
     });
 
