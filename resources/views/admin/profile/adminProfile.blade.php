@@ -10,19 +10,25 @@
                 <div class="col s12">
                     <div class="wrap-content plus-pb">
                         <div class="wrap-title">
-                            <h5>Photo Profile</h5>
+                            <h5>Profile</h5>
                         </div>
                         <div class="content">
                             <form method='POST' action="admin/update_profile.php" enctype="multipart/form-data">
-                                <img src="users/" alt="User Photo">
-                                <div class="button-upload">
-                                    <input id="button-file" type="file" name='photo'>
-                                    <label for="button-file">
-                                        <span class="button">Upload</span>
-                                    </label>
-                                </div><br><br>
-                                <input type="text" name="username" value="">
-                                <input type="email" name="email" value="" required readonly>
+                                <div class="form-control">
+                                    <img src="{{ asset('image/default_user.jpg') }}" alt="User Photo">
+                                </div><br><br><br><br><br>
+                                <div class="form-control">
+                                    <label>User Name</label>
+                                    <input type="text" name="username" value="{{ Auth::user()->name }}">
+                                </div>
+                                <div class="form-control">
+                                    <label>User Email</label>
+                                    <input type="email" name="email" value="{{ Auth::user()->email }}" readonly>
+                                </div>
+                                <div class="form-control">
+                                    <label>User Role</label>
+                                    <input type="email" name="text" value="{{ Auth::user()->role }}" readonly>
+                                </div>
                                 <button type="submit" class="button">Save Change</button>
                             </form>
                         </div>

@@ -57,14 +57,14 @@ body {
 
 @media (max-width: 280px) {
   .button-container {
-	justify-content: center; 
+	justify-content: center;
   }
-  
+
   .custom-button {
 	max-width: 100%;
   }
 }
-  
+
 .custom-button {
   position: relative;
   background: #f8f4f4;
@@ -618,7 +618,7 @@ a:focus {
 }
 
 .slide .slide-content .mask2 {
-	background-color: rgba(0, 0, 0, 0.55);	
+	background-color: rgba(0, 0, 0, 0.55);
 	position: absolute;
 	width: 100%;
 	top: 0;
@@ -1438,6 +1438,7 @@ a:focus {
 	width: 70px;
 	float: left;
 	margin-right: 20px;
+    margin-bottom: 10px;
 	border-radius: 2px;
 }
 
