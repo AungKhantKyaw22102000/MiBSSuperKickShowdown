@@ -9,7 +9,7 @@
             <div class="button-container ">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('admin#clubCreatePage') }}" class="custom-button" style="--clr:#BC13FE"><span class="d-block">Add Club</span><i></i></a>
+                        <h3>User List</h3>
                     </div>
                 </div>
             </div>
@@ -17,29 +17,30 @@
                 <thead>
                     <tr>
                         <th>User ID</th>
-                        <th>Club Name</th>
+                        <th>User Name</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($club as $c)
+                    @foreach ($admin as $a)
                     <tr class='$rowClass'>
-                        <td>{{ $c->id }}</td>
+                        <td>{{ $a->id }}</td>
+                        <td>{{ $a->name }}</td>
+                        <td>{{ $a->email }}</td>
                         <td>
-                            <a href='{{ route('admin#clubDetail', $c->id) }}'>
-                                <img src='{{ asset('storage/clubPhoto/'.$c->club_photo)}}' style='width: 20px; height: 20px;' alt="{{ $c->name }}">{{ $c->name }}
-                            </a>
+                            <select name="userRole" id="" class="form-control changeUserRole">
+                                <option value="user" @if ($a->role == 'user') selected @endif>User</option>
+                                <option value="admin" @if ($a->role == 'admin') selected @endif>Admin</option>
+                            </select>
                         </td>
-                        <td>{{ $c->played_match }}</td>
-                        <td>{{ $c->points }}</td>
                         <td>
                             <div class='btn-group'>
-                                <a class='' href='{{ route('admin#clubUpdatePage', $c->id) }}'>
+                                <a class='' href=''>
                                     <i class='fa-solid fa-pen-to-square' title='Update'></i>
                                 </a>
-                                <a class='' href='{{ route('admin#clubDelete', $c->id) }}'>
+                                <a class='' href=''>
                                     <i class='fa-solid fa-trash-can' title='Delete'></i>
                                 </a>
                             </div>
@@ -48,6 +49,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-5">
+                {{ $admin->links() }}
+                {{-- {{ $categories->appends(request()->query())->links() }} --}}
+            </div>
         </div>
     </div>
     <!-- end standing -->

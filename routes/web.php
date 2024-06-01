@@ -87,6 +87,9 @@ Route::middleware(['auth'])->group(function () {
         // profile routes
         Route::prefix('profile')->group(function(){
             Route::get('adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile');
+            Route::post('adminUpdate/{id}', [AdminController::class, 'adminUpdate'])->name('admin#update');
+            Route::get('adminChangePasswordPage', [AdminController::class, 'adminChangePasswordPage'])->name('admin#changePasswordPage');
+            Route::post('adminChangePassword', [AdminController::class, 'adminChangePassword'])->name('admin#changePassword');
         });
     });
 

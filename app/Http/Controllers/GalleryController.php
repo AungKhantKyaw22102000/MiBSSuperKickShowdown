@@ -90,7 +90,7 @@ class GalleryController extends Controller
     // gallery validation check
     private function galleryValidationCheck($request, $action){
         $validationRule = [
-            'headerName' => 'required|min:5|unique:galleries,name,'.$request->galleryId,
+            'headerName' => 'required|min:5|unique:galleries,header,'.$request->galleryId,
             'subHeader' => 'required|min:10',
             'briefing' => 'required',
             'mainText' => 'required',
