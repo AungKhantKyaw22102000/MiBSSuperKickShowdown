@@ -2,6 +2,22 @@
 
 @section('title', 'Club List')
 
+@section('search')
+<!-- search -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <form id="player-search-form" method="get">
+            @csrf
+            <input type="text" name="key" value="{{ request('key') }}" id="search-input" placeholder="Search">
+            <button class="button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<!-- end search -->
+@endsection
+
 @section('content')
     <!-- standing -->
     <div class="standing segments-page">
@@ -29,7 +45,8 @@
                         <td>{{ $c->id }}</td>
                         <td>
                             <a href='{{ route('admin#clubDetail', $c->id) }}'>
-                                <img src='{{ asset('storage/clubPhoto/'.$c->club_photo)}}' style='width: 20px; height: 20px;' alt="{{ $c->name }}">{{ $c->name }}
+                                <img src='{{ asset('storage/clubPhoto/'.$c->club_photo)}}' style='width: 20px; height: 20px;' alt="{{ $c->name }}">
+                                <span style="margin-bottom: 10px">{{ $c->name }}</span>
                             </a>
                         </td>
                         <td>{{ $c->played_match }}</td>

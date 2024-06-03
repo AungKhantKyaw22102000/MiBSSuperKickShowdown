@@ -33,9 +33,11 @@
                                     <li>Losses <span>{{ $club->lose }}</span></li>
                                     <li class='stripe'>Play Match <span>{{ $club->played_match }}</span></li>
                                     <li>Yellow Card <i class='fas fa-square-full red-text'></i>
-                                        <span>{{ $club->yellow_card }}</span></li>
+                                        <span>{{ $club->yellow_card }}</span>
+                                    </li>
                                     <li class='stripe'>Red Card <i class='fas fa-square-full yellow-text text-darken-1'></i>
-                                        <span>{{ $club->red_card }}</span></li>
+                                        <span>{{ $club->red_card }}</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -45,25 +47,31 @@
                             <div class='content-players'>
                                 <div class='row'>
                                     <div class='col s3'>
+                                        @foreach ($players as $player)
                                         <div class='content-image'>
-                                            <img src='player_photo/" . $p_row['player_photo'] . "' alt=''>
+                                            <img src='{{ asset('storage/playerPhoto/' . $player->player_photo) }}' alt=''>
+                                                </div>
+                                            </div>
+                                            <div class='col s9'>
+                                                <div class='content-text'>
+                                                    <h6>
+                                                        <a href='{{ route('admin#playerDetail', $player->id) }}'>{{$player->name}}</a>
+                                                    </h6>
+                                                    <p>Back Number - {{ $player->back_number }}</p>
+                                                    <p>DoB - {{ $player->date_of_birth }}</p>
+                                                </div>
+                                            </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    <div class='col s9'>
-                                        <div class='content-text'>
-                                            <h6><a href='player-details.php?viewplayer=" . $pid . "'>" .
-                                                $p_row['player_name'] . "</a></h6>
-                                            <p></p>
-                                            <a href='#'>" . $row_c['club_name'] . "</a>
-                                        </div>
-                                    </div>
-                                </div>" ; </div>
-                                        </div>
-                                    </div>";
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end club details -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end club details -->
 
-                @endsection
+    @endsection

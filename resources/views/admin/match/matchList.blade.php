@@ -2,6 +2,22 @@
 
 @section('title', 'Matches Page')
 
+@section('search')
+<!-- search -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <form id="player-search-form" method="get">
+            @csrf
+            <input type="text" name="key" value="{{ request('key') }}" id="search-input" placeholder="Search">
+            <button class="button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<!-- end search -->
+@endsection
+
 @section('content')
     <!-- standing -->
     <div class="standing segments-page">

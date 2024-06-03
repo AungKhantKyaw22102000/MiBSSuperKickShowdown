@@ -23,7 +23,9 @@ class AdminController extends Controller
 
     // direct user list route
     public function userList(){
-        $admin = User::paginate(20);
+        $admin = User::when(request('key'),function($query){
+            $query->where('name','like','%'.request('key').'%');
+        })->paginate(20);
         return view('admin.profile.userList', compact('admin'));
     }
 
@@ -61,6 +63,14 @@ class AdminController extends Controller
         }
         User::where('id',$id)->update($data);
         return redirect()->route('admin#adminProfile');
+    }
+
+    // user change role
+    public function changeRole(Request $request){
+        $user = User::where('id',$request->userId)->update([
+            'role' => $request->status
+        ]);
+        return response()->json($user, 200);
     }
 
     // account validation check

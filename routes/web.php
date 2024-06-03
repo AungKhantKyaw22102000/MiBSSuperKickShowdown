@@ -11,12 +11,28 @@ use App\Http\Controllers\FootballMatchController;
 
 // Public routes
 Route::get('/', [UserController::class, 'home'])->name('user#homePage');
+
+// gallery routes
 Route::get('/blog', [UserController::class, 'blogList'])->name('user#blogPage');
+Route::get('/blog/detail/{id}', [UserController::class, 'blogDetail'])->name('user#blogDetail');
+
+// club routes
 Route::get('/club', [UserController::class, 'clubList'])->name('user#clubList');
+Route::get('/club/detail/{id}', [UserController::class, 'clubDetail'])->name('user#clubDetail');
+
+// contact route
 Route::get('/contact', [UserController::class, 'contact'])->name('user#contactPage');
+
+// match routes
 Route::get('/match', [UserController::class, 'matchList'])->name('user#matchPage');
+
+// players routes
 Route::get('/player', [UserController::class, 'playerList'])->name('user#playerPage');
+
+// result routes
 Route::get('/result', [UserController::class, 'resultList'])->name('user#resultPage');
+
+// statistic routes
 Route::get('/stats', [UserController::class, 'statList'])->name('user#statsPage');
 
 // Login and register routes
@@ -71,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('list', [GalleryController::class, 'galleryList'])->name('admin#galleryList');
             Route::get('createPage', [GalleryController::class, 'galleryCreatePage'])->name('admin#galleryCreatePage');
             Route::post('create', [GalleryController::class, 'galleryCreate'])->name('admin#galleryCreate');
-            Route::get('deatil/{id}', [GalleryController::class, 'galleryDetail'])->name('admin#galleryDetail');
+            Route::get('detail/{id}', [GalleryController::class, 'galleryDetail'])->name('admin#galleryDetail');
             Route::get('delete/{id}', [GalleryController::class, 'deleteGallery'])->name('admin#deleteGallery');
             Route::get('update/{id}', [GalleryController::class, 'galleryUpdatePage'])->name('admin#galleryUpdatePage');
             Route::post('update', [GalleryController::class, 'galleryUpdate'])->name('admin#galleryUpdate');
@@ -81,6 +97,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('users')->group(function(){
             Route::get('list', [AdminController::class, 'userList'])->name('admin#userList');
             Route::get('delete/{id}', [AdminController::class, 'userDelete'])->name('admin#userDelete');
+            Route::get('change/role', [AdminController::class, 'changeRole'])->name('admin#changeRole');
             Route::get('detail/{id}', [AdminController::class, 'userDetail'])->name('admin#userDetail');
         });
 
@@ -90,6 +107,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('adminUpdate/{id}', [AdminController::class, 'adminUpdate'])->name('admin#update');
             Route::get('adminChangePasswordPage', [AdminController::class, 'adminChangePasswordPage'])->name('admin#changePasswordPage');
             Route::post('adminChangePassword', [AdminController::class, 'adminChangePassword'])->name('admin#changePassword');
+        });
+
+        // comment
+        Route::prefix('comment')->group(function(){
+            Route::get('comment',[GalleryController::class, 'comment'])->name('admin#comment');
+            Route::post('createComment',[GalleryController::class, 'createComment'])->name('admin#createComment');
         });
     });
 

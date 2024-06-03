@@ -8,7 +8,7 @@
         <div class='container'>
             <div class="row">
                 <div class="col-3 offset-8">
-                    <span onclick="history.back()"><i class="fa-solid fa-backward text-dark"></i> Back</span>
+                    <a href="{{ route('admin#galleryList') }}"><span><i class="fa-solid fa-backward text-dark"></i> Back</span></a>
                 </div>
             </div>
             <div class='wrap-content'>
@@ -36,25 +36,32 @@
             <div class='comments-section'>
                 <h4>Comments</h4>
 
+                @foreach ($comments as $comment)
                 <div class='author'>
                     <div class='content-image'>
-                        <img src='users/" . $commentRow['photo_path'] . "' alt='User Photo'>
+                        @if ($comment->user_image == null)
+                            <img src="{{ asset('image/default_user.jpg') }}" alt="User Photo">
+                        @else
+                            <img src="{{ asset('storage/userPhoto/' . $comment->user_image) }}" class="img-thumbnail" alt="{{ $comment->user_name }}">
+                        @endif
                     </div>
                     <div class='content-text'>
-                        <h5>" . $commentRow['username'] . "</h5>
-                        <p>" . $commentRow['comment_text'] . "</p>
+                        <h5>{{ $comment->user_name }}</h5>
+                        <p>{{ $comment->comment }}</p>
                         <ul>
-                            <li>" . $commentRow['formatted_date'] . "</li>
+                            <li>{{ $comment->created_at->format('d-M-Y') }}</li>
                         </ul>
                     </div>
                 </div>
+                @endforeach
 
                 <div class='comment-form'>
                     <h4>Leave Your Reply</h4>
-                    <form action='admin/insert_comment.php' method='POST'>
-                        <!-- Add hidden input for gallery_id -->
-                        <input type='hidden' name='gallery_id' value='" . $gid . "'>
-                        <textarea name='message' cols='30' rows='10' placeholder='Message'></textarea>
+                    <form action='' method='POST'>
+                        @csrf
+                        <input type='hidden' name='galleryId' value='{{ $gallery->id }}'>
+                        <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
+                        <textarea name='commentMessage' cols='30' rows='10' placeholder='Message'></textarea>
                         <button class='button' type='submit'><i class='fa fa-send'></i>Submit</button>
                     </form>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,9 @@ class GalleryController extends Controller
 {
     // direct gallery List route
     public function galleryList(){
-        $galleries = Gallery::get();
+        $galleries = Gallery::when(request('key'),function($query){
+            $query->where('header','like','%'.request('key').'%');
+        })->get();
         return view('admin.blog.blogList', compact('galleries'));
     }
 
@@ -22,8 +25,11 @@ class GalleryController extends Controller
 
     // direct gallery detail route
     public function galleryDetail($id){
-        $gallery = Gallery::where('id',$id)->first();
-        return view('admin.blog.detail', compact('gallery'));
+        $gallery = Gallery::find($id);
+        $comments = Comment::select('comments.*','users.name as user_name','users.image as user_image')
+                    ->leftJoin('users','comments.user_id','users.id')
+                    ->where('gallery_id', $id)->get();
+        return view('admin.blog.detail', compact('gallery', 'comments'));
     }
 
     public function galleryUpdatePage($id){
@@ -86,6 +92,12 @@ class GalleryController extends Controller
         return redirect()->route('admin#galleryList')->with(['updateSuccess' => 'Gallery updated successfully.']);
     }
 
+    // comment section
+    public function createComment(Request $request){
+        $comment = $this->commentRequestData($request);
+        Comment::create($comment);
+        return back();
+    }
 
     // gallery validation check
     private function galleryValidationCheck($request, $action){
@@ -111,6 +123,15 @@ class GalleryController extends Controller
             'sub_header' => $request->subHeader,
             'briefing' => $request->briefing,
             'main_text' => $request->mainText,
+        ];
+    }
+
+    // comment request data
+    private function commentRequestData($request){
+        return[
+            'comment' => $request->commentMessage,
+            'gallery_id' => $request->galleryId,
+            'user_id' => $request->userId, 
         ];
     }
 }

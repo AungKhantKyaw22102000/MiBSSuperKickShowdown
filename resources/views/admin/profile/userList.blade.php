@@ -2,6 +2,22 @@
 
 @section('title', 'User List')
 
+@section('search')
+<!-- search -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <form id="player-search-form" method="get">
+            @csrf
+            <input type="text" name="key" value="{{ request('key') }}" id="search-input" placeholder="Search">
+            <button class="button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<!-- end search -->
+@endsection
+
 @section('content')
     <!-- standing -->
     <div class="standing segments-page">
@@ -16,8 +32,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>User Name</th>
+                        <th>Image</th>
+                        <th style="text-align: center">User Name</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th></th>
@@ -26,11 +42,18 @@
                 <tbody>
                     @foreach ($admin as $a)
                     <tr class='$rowClass'>
-                        <td>{{ $a->id }}</td>
+                        <input type="hidden" value="{{ $a->id }}" class="userId">
+                        <td style="text-align: center;">
+                            @if($a->image == null)
+                            <img src="{{ asset('image/default_user.jpg') }}" alt="{{ $a->name }}" style="width: 150px;" />
+                            @else
+                                <img src="{{ asset('storage/userPhoto/' . $a->image) }}" alt="{{ $a->name }}" style="width: 150px">
+                            @endif
+                        </td>
                         <td>{{ $a->name }}</td>
                         <td>{{ $a->email }}</td>
                         <td>
-                            <select name="userRole" id="" class="form-control changeUserRole">
+                            <select name="userRole" id="" class="changeUserRole">
                                 <option value="user" @if ($a->role == 'user') selected @endif>User</option>
                                 <option value="admin" @if ($a->role == 'admin') selected @endif>Admin</option>
                             </select>
@@ -51,9 +74,31 @@
             </table>
             <div class="mt-5">
                 {{ $admin->links() }}
-                {{-- {{ $categories->appends(request()->query())->links() }} --}}
             </div>
         </div>
     </div>
     <!-- end standing -->
+@endsection
+
+@section('scriptSection')
+<script>
+    $(document).ready(function(){
+        $('.changeUserRole').change(function(){
+            $currentStatus = $(this).val();
+            $parentNode = $(this).parents('tr');
+            $userId = $parentNode.find('.userId').val();
+            $data = {
+                'userId' : $userId,
+                'status' : $currentStatus
+            };
+
+            $.ajax({
+                type : 'get' ,
+                url : 'http://127.0.0.1:8000/admin/users/change/role',
+                data : $data,
+                dataType : 'json',
+            })
+        })
+    })
+</script>
 @endsection

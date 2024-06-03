@@ -17,7 +17,7 @@
                                 @csrf
                                 <div class="form-control">
                                     @if (Auth::user()->image == null)
-                                        <img src="{{ asset('image/default_user.jpg') }}" alt="User Photo">
+                                        <img src="{{ asset('image/default_user.jpg') }}" alt="User Photo" class="img-thumbnail">
                                     @else
                                         <img src="{{ asset('storage/userPhoto/' . Auth::user()->image) }}" class="img-thumbnail" alt="">
                                     @endif

@@ -2,6 +2,22 @@
 
 @section('title', 'Admin Player Stats Page')
 
+@section('search')
+<!-- search -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <form id="player-search-form">
+            <input type="text" id="search-input" placeholder="Search">
+            <button class="button" id="search-button"><i class="fas fa-search"></i></button>
+        </form>
+        <div id="search-results">
+            <!-- Results will be displayed here -->
+        </div>
+    </div>
+</div>
+<!-- end search -->
+@endsection
+
 @section('content')
     <!-- standing -->
     <div class="standing segments-page">

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class FootballMatchController extends Controller
 {
     // Direct football match route
-    public function footballMatchList(){
+    public function footballMatchList() {
         $matches = FootballMatch::select('football_matches.*',
                                          'team1.name as team1_name',
                                          'team1.club_photo as team1_photo',
@@ -19,12 +19,20 @@ class FootballMatchController extends Controller
                                          'team2.club_photo as team2_photo')
                                 ->leftJoin('clubs as team1', 'football_matches.team1_id', 'team1.id')
                                 ->leftJoin('clubs as team2', 'football_matches.team2_id', 'team2.id')
-                                ->where(function($query) {
+                                ->when(request('key'), function ($query) {
+                                    $key = request('key');
+                                    $query->where(function ($q) use ($key) {
+                                        $q->where('team1.name', 'like', '%' . $key . '%')
+                                          ->orWhere('team2.name', 'like', '%' . $key . '%');
+                                    });
+                                })
+                                ->where(function ($query) {
                                     $query->where('finished', 0)
                                           ->orWhereNull('finished');
                                 })
                                 ->orderBy('created_at', 'desc')
                                 ->get();
+
         return view('admin.match.matchList', compact('matches'));
     }
 

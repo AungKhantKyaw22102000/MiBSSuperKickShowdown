@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Club;
+use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -11,7 +12,9 @@ class ClubController extends Controller
 {
     // direct route club list
     public function clubList(){
-        $club = Club::orderBy('id','asc')->get();
+        $club = Club::when(request("key"),function($query){
+            $query->where('name','like','%'.request('key').'%');
+        })->orderBy('id','asc')->get();
         return view('admin.club.clubList', compact('club'));
     }
 
@@ -22,8 +25,11 @@ class ClubController extends Controller
 
     // direct route club detail
     public function clubDetail($id){
-        $club = Club::where('id',$id)->first();
-        return view('admin.club.detail', compact('club'));
+        $club = Club::find($id);
+        $players = Player::select('players.*','clubs.name as club_name')
+                    ->leftJoin('clubs','clubs.id','players.club_id')
+                    ->where('club_id', $id)->get();
+        return view('admin.club.detail', compact('club', 'players'));
     }
 
     // direct route club update

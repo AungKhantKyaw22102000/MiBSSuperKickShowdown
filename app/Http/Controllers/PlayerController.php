@@ -13,8 +13,12 @@ class PlayerController extends Controller
     // direct player list route
     public function playerList(){
         $players = Player::select('players.*','clubs.name as club_name')
+                ->when(request('key'),function($query){
+                    $query->where('players.name','like','%'.request('key').'%');
+                })
                 ->leftjoin('clubs','players.club_id','clubs.id')
                 ->paginate(10);
+                $players->appends(request()->all());
         return view('admin.player.playerList', compact('players'));
     }
 

@@ -2,16 +2,32 @@
 
 @section('title', 'Home')
 
+@section('search')
+<!-- search -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <form id="player-search-form" method="get">
+            @csrf
+            <input type="text" name="key" value="{{ request('key') }}" id="search-input" placeholder="Search">
+            <button class="button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<!-- end search -->
+@endsection
+
 @section('content')
     <!-- standing -->
     <div class="standing segments-page">
         <div class="container"><br>
             <div class="button-container">
-                <a href="schedule.php" class="custom-button" style="--clr:#BC13FE"><span>Schedule</span><i></i></a>
-                <a href="stats.php" class="custom-button" style="--clr:#FFF01F"><span>Statistics</span><i></i></a>
-                <a href="results.php" class="custom-button" style="--clr:#39FF14"><span>Result</span><i></i></a>
-                <a href="players.php" class="custom-button" style="--clr:#FF3131"><span>Player</span><i></i></a>
-                <a href="gallery.php" class="custom-button" style="--clr:#EA00FF"><span>Gallery</span><i></i></a>
+                <a href="{{ route('user#homePage') }}" class="custom-button" style="--clr:#BC13FE"><span>Schedule</span><i></i></a>
+                <a href="{{ route('user#statsPage') }}" class="custom-button" style="--clr:#FFF01F"><span>Statistics</span><i></i></a>
+                <a href="{{ route('user#resultPage') }}" class="custom-button" style="--clr:#39FF14"><span>Result</span><i></i></a>
+                <a href="{{ route('user#playerPage') }}" class="custom-button" style="--clr:#FF3131"><span>Player</span><i></i></a>
+                <a href="{{ route('user#blogPage') }}" class="custom-button" style="--clr:#EA00FF"><span>Gallery</span><i></i></a>
             </div>
             <table>
                 <thead>
@@ -29,29 +45,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class='$rowClass'>
-                        <td>" . $i++ . "</td>
-                        <td><a href='club-details.php?viewteam=" . $id ."'><img src='photo/'
-                                    style='width: 20px; height: 20px;'></a></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <div class='btn-group'>
-                                <a class='' href='update_team.php?update=" . $id ."'>
-                                    <i class='fa-solid fa-pen-to-square' title='Update'></i>
-                                </a>
-                                <a class='' href='standing.php?delete="  . $id . "'>
-                                    <i class='fa-solid fa-trash-can' title='Delete'></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    @php
+                        $i = 1;
+                        $totalClubs = count($club);
+                    @endphp
+
+                    @foreach ($club as $c)
+                        @if ($i <= $totalClubs)
+                            <tr class=''>
+                                <td>{{ $i }}</td>
+                                <td>
+                                    <a href="{{ route('user#clubDetail', $c->id) }}">
+                                        <img src="{{ asset('storage/clubPhoto/' . $c->club_photo) }}" style='width: 20px; height: 20px;'>
+                                        <span>{{ $c->name }}</span>
+                                    </a> 
+                                </td>
+                                <td>{{ $c->played_match }}</td>
+                                <td>{{ $c->win }}</td>
+                                <td>{{ $c->draw }}</td>
+                                <td>{{ $c->lose }}</td>
+                                <td>{{ $c->goal_for }}</td>
+                                <td>{{ $c->goal_against }}</td>
+                                <td>{{ $c->goal_difference }}</td>
+                                <td>{{ $c->points }}</td>
+                            </tr>
+                            @php
+                                $i++;
+                            @endphp
+                        @endif
+                    @endforeach
+
                 </tbody>
             </table>
         </div>
