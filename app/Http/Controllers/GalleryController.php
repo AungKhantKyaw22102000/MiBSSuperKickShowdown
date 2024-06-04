@@ -18,7 +18,7 @@ class GalleryController extends Controller
         return view('admin.blog.blogList', compact('galleries'));
     }
 
-    // direct gallery create route
+    // gallery create route
     public function galleryCreatePage(){
         return view('admin.blog.create');
     }
@@ -93,7 +93,7 @@ class GalleryController extends Controller
     }
 
     // comment section
-    public function createComment(Request $request){
+    public function commentCreate(Request $request){
         $comment = $this->commentRequestData($request);
         Comment::create($comment);
         return back();

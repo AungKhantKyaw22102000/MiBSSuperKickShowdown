@@ -45,25 +45,35 @@
                         </div>
                     </div>
 
-                    <a href=''>
+                    @php
+                        $topGoals = $goals->slice(0, 10);
+                    @endphp
+
+                    @foreach ($topGoals as $g)
                         <div class='wrap-player bg-grey'>
                             <div class='row'>
                                 <div class='col s8'>
                                     <div class='content-left'>
                                         <ul>
-                                            <li></li>
-                                            <li><img src='photo/"' style='width: 13px; height: 14px;'></li>
+                                            <a href="{{ route('user#playerDetail', $g->id) }}">
+                                                <li>{{ $g->name }}</li>
+                                                <li>
+                                                    <img src='{{ asset('storage/clubPhoto/' . $g->club_photo) }}' style='width: 13px; height: 14px;'>
+                                                    <span>{{ $g->club_name }}</span>
+                                                </li>
+                                            </a>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class='col s4'>
                                     <div class='content-right'>
-                                        <span></span>
+                                        <span>{{ $g->goal }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    @endforeach
+
                 </div>
             </div>
             <div class="wrappers">
@@ -85,25 +95,35 @@
                             </div>
                         </div>
                     </div>
-                    <a href=''>
+
+                    @php
+                        $topAssists = $assists->slice(0, 10);
+                    @endphp
+
+                    @foreach ($topAssists as $a)
                         <div class='wrap-player no-bdr'>
                             <div class='row'>
                                 <div class='col s8'>
                                     <div class='content-left'>
                                         <ul>
-                                            <li></li>
-                                            <li><img src='photo/"' style='width: 13px; height: 14px;'></li>
+                                            <a href='{{ route('user#playerDetail', $a->id) }}'>
+                                                <li>{{ $a->name }}</li>
+                                                <li>
+                                                    <img src='{{ asset('storage/clubPhoto/' . $g->club_photo) }}' style='width: 13px; height: 14px;'>
+                                                    <span>{{ $a->club_name }}</span>
+                                                </li>
+                                            </a>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class='col s4'>
                                     <div class='content-right'>
-                                        <span></span>
+                                        <span>{{ $a->assist }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    @endforeach
                 </div>
             </div>
         </div>

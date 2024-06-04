@@ -27,24 +27,27 @@
                 <h4>Players</h4>
             </div>
 
+            @foreach ($players as $p)
             <div class='row'>
                 <div class='col s3'>
                     <div class='content-image'>
-                        <img src='player_photo/' alt=''>
+                        <img src='{{ asset('storage/playerPhoto/' . $p->player_photo) }}' alt='{{ $p->name }}'>
                     </div>
                 </div>
                 <div class='col s9'>
                     <div class='content-text'>
-                        <a href='player-details.php?viewplayer=" . $id . "'>
-                            <h6></h6>
+                        <a href='{{ route('user#playerDetail', $p->id) }}'>
+                            <h6>{{ $p->name }}</h6>
                         </a>
                         <p></p>
-                        <a href='club-details.php?viewteam=" . $c_id . "'>
-                            <img src='photo/' style='width: 18px; height: 18px;'>
+                        <a href='{{ route('user#clubDetail', $p->club_id) }}'>
+                            <img alt="{{ $p->club_name }}" src='{{ asset('storage/clubPhoto/' . $p->club_photo) }}' style='width: 18px; height: 18px;'>
+                            <span>{{ $p->club_name }}</span>
                         </a>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
     <!-- end players -->

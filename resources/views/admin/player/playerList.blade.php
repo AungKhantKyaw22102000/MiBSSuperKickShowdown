@@ -70,9 +70,8 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="mt-3">
-                {{ $players->links() }}
-                {{-- {{ $categories->appends(request()->query())->links() }} --}}
+            <div class="pagination">
+                {{ $players->links('vendor.pagination.pagination-links') }}
             </div>
         </div>
     </div>

@@ -23,7 +23,7 @@
     <div class="standing segments-page">
         <div class="container"><br>
             <div class="button-container">
-                <a href="{{ route('user#homePage') }}" class="custom-button" style="--clr:#BC13FE"><span>Schedule</span><i></i></a>
+                <a href="{{ route('user#matchPage') }}" class="custom-button" style="--clr:#BC13FE"><span>Schedule</span><i></i></a>
                 <a href="{{ route('user#statsPage') }}" class="custom-button" style="--clr:#FFF01F"><span>Statistics</span><i></i></a>
                 <a href="{{ route('user#resultPage') }}" class="custom-button" style="--clr:#39FF14"><span>Result</span><i></i></a>
                 <a href="{{ route('user#playerPage') }}" class="custom-button" style="--clr:#FF3131"><span>Player</span><i></i></a>

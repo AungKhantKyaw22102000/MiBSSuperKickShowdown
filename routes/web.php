@@ -28,6 +28,7 @@ Route::get('/match', [UserController::class, 'matchList'])->name('user#matchPage
 
 // players routes
 Route::get('/player', [UserController::class, 'playerList'])->name('user#playerPage');
+Route::get('/player/detail/{id}', [UserController::class, 'playerDetail'])->name('user#playerDetail');
 
 // result routes
 Route::get('/result', [UserController::class, 'resultList'])->name('user#resultPage');
@@ -117,9 +118,20 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // User-specific routes
-    Route::prefix('user')->group(function(){
+    Route::prefix('user')->middleware(['user_auth'])->group(function(){
         Route::get('profile', [UserController::class, 'profile'])->name('user#profile');
         Route::post('updateProfile', [UserController::class, 'updateProfile'])->name('user#updateProfile');
+
+        // user comment routes
+        Route::prefix('comment')->group(function(){
+            Route::get('list',[UserController::class, 'comment'])->name('user#comment');
+            Route::post('create',[UserController::class, 'createComment'])->name('user#commentCreate');
+        });
+
+        // user vote routes
+        Route::prefix('vote')->group(function(){
+            Route::post('create', [UserController::class, 'createVote'])->name('user#createVote');
+        });
     });
 });
 

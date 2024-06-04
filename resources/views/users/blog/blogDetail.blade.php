@@ -57,13 +57,23 @@
 
                 <div class='comment-form'>
                     <h4>Leave Your Reply</h4>
-                    <form action='{{ route('admin#createComment') }}' method='POST'>
+                    <form action='{{ route('user#commentCreate') }}' method='POST'>
                         @csrf
                         <input type='hidden' name='galleryId' value='{{ $gallery->id }}'>
-                        <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
+                        @auth
+                            <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
+                        @endauth
                         <textarea name='commentMessage' cols='30' rows='10' placeholder='Message'></textarea>
                         <button class='button' type='submit'><i class='fa fa-send'></i>Submit</button>
                     </form>
+                    @guest
+                        <script>
+                            document.getElementById('commentForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                                window.location.href = "{{ route('auth#loginPage') }}";
+                            });
+                        </script>
+                    @endguest
                 </div>
             </div>
         </div>

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->string('option', 10);
+            $table->integer('user_id');
             $table->integer('match_id');
             $table->timestamps();
         });

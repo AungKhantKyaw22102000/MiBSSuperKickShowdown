@@ -73,7 +73,7 @@
                 </tbody>
             </table>
             <div class="mt-5">
-                {{ $admin->links() }}
+                {{ $admin->links('vendor.pagination.pagination-links') }}
             </div>
         </div>
     </div>

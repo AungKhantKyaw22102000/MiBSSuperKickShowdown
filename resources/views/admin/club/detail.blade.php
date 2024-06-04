@@ -45,26 +45,24 @@
                     <div id='tabs2' class='col s12'>
                         <div class='contents-tabs'>
                             <div class='content-players'>
+                                @foreach ($players as $player)
                                 <div class='row'>
                                     <div class='col s3'>
-                                        @foreach ($players as $player)
                                         <div class='content-image'>
-                                            <img src='{{ asset('storage/playerPhoto/' . $player->player_photo) }}' alt=''>
-                                                </div>
-                                            </div>
-                                            <div class='col s9'>
-                                                <div class='content-text'>
-                                                    <h6>
-                                                        <a href='{{ route('admin#playerDetail', $player->id) }}'>{{$player->name}}</a>
-                                                    </h6>
-                                                    <p>Back Number - {{ $player->back_number }}</p>
-                                                    <p>DoB - {{ $player->date_of_birth }}</p>
-                                                </div>
-                                            </div>
+                                            <img src='{{ asset('storage/playerPhoto/' . $player->player_photo) }}' alt='{{ $player->name }}'>
                                         </div>
-                                        @endforeach
+                                    </div>
+                                    <div class='col s9'>
+                                        <div class='content-text'>
+                                            <h6>
+                                                <a href='{{ route('user#playerDetail', $player->id) }}'>{{$player->name}}</a>
+                                            </h6>
+                                            <p>Back Number - {{ $player->back_number }}</p>
+                                            <p>DoB - {{ $player->date_of_birth }}</p>
+                                        </div>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
