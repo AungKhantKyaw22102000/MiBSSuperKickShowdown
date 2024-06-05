@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use Carbon\Carbon;
 use App\Models\Club;
 use App\Models\Vote;
 use App\Models\Player;
@@ -10,7 +11,11 @@ use App\Models\Gallery;
 use Illuminate\Http\Request;
 use App\Models\FootballMatch;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -31,13 +36,38 @@ class UserController extends Controller
         return view('users.club.clubDetail', compact('club', 'players'));
     }
 
-    // direct gallery List route
-    public function blogList(){
-        $galleries = Gallery::when(request('key'),function($query){
-            $query->where('header','like','%'.request('key').'%');
-        })->get();
-        return view('users.blog.blog', compact('galleries'));
+    public function blogList() {
+        $galleriesQuery = Gallery::when(request('key'), function($query) {
+            $query->where('header', 'like', '%' . request('key') . '%');
+        })
+        ->when(request('date') && request('date') != 'all', function($query) {
+            $query->whereDate('created_at', request('date'));
+        });
+        $paginatedGalleries = $galleriesQuery->paginate(6);
+        $groupedGalleries = $paginatedGalleries->getCollection()->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->format('d-M-Y');
+        });
+        $paginatedGalleries->setCollection($groupedGalleries);
+        // Handle AJAX requests
+        if (request()->ajax()) {
+            $responseGalleries = $groupedGalleries->map(function ($group) {
+                return $group->map(function ($gallery) {
+                    return [
+                        'header' => $gallery->header,
+                        'sub_header' => $gallery->sub_header,
+                        'created_at' => $gallery->created_at->format('d-M-Y'),
+                        'first_photo_url' => asset('storage/galleryPhoto/' . $gallery->first_photo),
+                        'detail_url' => route('user#blogDetail', $gallery->id),
+                    ];
+                });
+            });
+
+            return response()->json(['galleries' => $responseGalleries]);
+        }
+
+        return view('users.blog.blog', compact('paginatedGalleries'));
     }
+
 
     // direct gallery detail route
     public function blogDetail($id){
@@ -80,44 +110,42 @@ class UserController extends Controller
                                     $query->where('finished', 0)
                                           ->orWhereNull('finished');
                                 })
-                                ->orderBy('created_at', 'desc')
+                                ->orderBy('play_date', 'desc')
                                 ->get();
-
-        return view('users.matches.matches', compact('matches'));
+        $groupedMatches = $matches->groupBy('play_date');
+        return view('users.matches.matches', compact('groupedMatches'));
     }
 
     // vote section
-    public function createVote(Request $request)
-    {
-        $userId = Auth::id();
-        $matchId = $request->input('match_id');
-        $selectedOption = $request->input('vote');
-        $currentDate = now()->toDateString();
-
-        $match = FootballMatch::find($matchId);
-
-        if (!$match || $match->play_date < $currentDate) {
-            return response()->json(['error' => 'The voting period for this match has ended.'], 403);
-        }
-
-        $existingVote = Vote::where('user_id', $userId)
-                            ->where('match_id', $matchId)
-                            ->whereDate('created_at', $currentDate)
-                            ->first();
-
-        if ($existingVote) {
-            return response()->json(['error' => 'You can only vote once per day.'], 403);
-        }
+    public function createVote(Request $request) {
+        $validatedData = $request->validate([
+            'matchId' => 'required|integer',
+            'vote' => 'required|string|in:team1,team2,draw',
+        ]);
 
         $vote = new Vote();
-        $vote->user_id = $userId;
-        $vote->match_id = $matchId;
-        $vote->option = $selectedOption;
+        $vote->user_id = Auth::id(); // Assuming user is authenticated
+        $vote->match_id = $request->matchId;
+        $vote->option = $request->vote;
         $vote->save();
 
-        return response()->json(['message' => 'Vote submitted successfully!']);
+        // Get the updated vote counts for the match
+        $totalVotes = Vote::where('match_id', $request->matchId)->count();
+        $team1Votes = Vote::where('match_id', $request->matchId)->where('option', 'team1')->count();
+        $team2Votes = Vote::where('match_id', $request->matchId)->where('option', 'team2')->count();
+        $drawVotes = Vote::where('match_id', $request->matchId)->where('option', 'draw')->count();
+
+        // Return the updated vote counts along with the success message
+        return response()->json([
+            'message' => 'Vote submitted successfully',
+            'total' => $totalVotes,
+            'team1' => $team1Votes,
+            'team2' => $team2Votes,
+            'draw' => $drawVotes,
+        ]);
     }
 
+    // show vote result
     public function showResults($matchId)
     {
         $match = FootballMatch::find($matchId);
@@ -130,25 +158,48 @@ class UserController extends Controller
         $team2Votes = Vote::where('match_id', $matchId)->where('option', 'team2')->count();
         $drawVotes = Vote::where('match_id', $matchId)->where('option', 'draw')->count();
 
+        // Fetch team names from the $match object or wherever they are stored
+        $team1Name = Club::find($match->team1_id)->name ?? 'Team 1';
+        $team2Name = Club::find($match->team2_id)->name ?? 'Team 2';
+
         return response()->json([
             'total' => $totalVotes,
             'team1' => $team1Votes,
             'team2' => $team2Votes,
             'draw' => $drawVotes,
+            'team1_name' => $team1Name,
+            'team2_name' => $team2Name,
         ]);
     }
 
-    // direct player list route
-    public function playerList(){
-        $players = Player::select('players.*','clubs.name as club_name', 'clubs.club_photo as club_photo')
-                ->when(request('key'),function($query){
-                    $query->where('players.name','like','%'.request('key').'%');
-                })
-                ->leftjoin('clubs','players.club_id','clubs.id')
-                ->paginate(10);
-                $players->appends(request()->all());
+    // player direct route
+    public function playerList() {
+        $players = Player::select('players.*', 'clubs.name as club_name', 'clubs.club_photo as club_photo')
+            ->when(request('key'), function($query) {
+                $query->where('players.name', 'like', '%' . request('key') . '%');
+            })
+            ->when(request('team') && request('team') != 'all', function($query) {
+                $query->where('clubs.name', request('team'));
+            })
+            ->leftJoin('clubs', 'players.club_id', 'clubs.id')
+            ->paginate(10);
+
+        $players->appends(request()->all());
+
+        if (request()->ajax()) {
+            $players->getCollection()->transform(function ($player) {
+                $player->player_photo_url = asset('storage/playerPhoto/' . $player->player_photo);
+                $player->club_photo_url = asset('storage/clubPhoto/' . $player->club_photo);
+                $player->detail_url = route('user#playerDetail', $player->id);
+                $player->club_detail_url = route('user#clubDetail', $player->club_id);
+                return $player;
+            });
+            return response()->json(['players' => $players]);
+        }
+
         return view('users.players.player', compact('players'));
     }
+
 
     // direct player detail route
     public function playerDetail($id){
@@ -159,9 +210,66 @@ class UserController extends Controller
         return view('admin.player.detail', compact('player'));
     }
 
+    // direct user profile route
+    public function profile(){
+        return view('users.profile.profile');
+    }
+
+    // update profile
+    public function updateProfile($id, Request $request){
+        $this->accountValidationCheck($request);
+        $data = $this->getUserData($request);
+        if($request->hasFile('userPhoto')){
+            $dbImage = User::where('id',$id)->first();
+            $dbImage = $dbImage->image;
+
+            if($dbImage != null){
+                Storage::delete('public/userPhoto/'.$dbImage);
+            }
+
+            $fileName = uniqid() . $request->file('userPhoto')->getClientOriginalName();
+            $request->file('userPhoto')->storeAs('public/userPhoto', $fileName);
+            $data['image'] = $fileName;
+        }
+        User::where('id',$id)->update($data);
+        return redirect()->route('admin#adminProfile');
+    }
+
+    // direct user change password route
+    public function userChangePasswordPage(){
+        return view('users.profile.changePassword');
+    }
+
+    // user change password
+    public function userChangePassword(Request $request){
+        $this->passwordValidationCheck($request);
+        $currentUserId = Auth::user()->id;
+        $user = User::select('password')->where('id',$currentUserId)->first();
+        $dbPassword = $user->password;
+
+        if(Hash::check($request->oldPassword, $dbPassword)){
+            User::where('id', $currentUserId)->update([
+                'password' => Hash::make($request->newPassword)
+            ]);
+            return back();
+        }
+        return back()->with(['notMatch' => 'The old Password Not Match. Try Again!']);
+    }
+
     // direct user result page
     public function resultList(){
-        return view('users.result.result');
+        $matches = FootballMatch::select('football_matches.*',
+                                         'team1.name as team1_name',
+                                         'team1.club_photo as team1_photo',
+                                         'team2.name as team2_name',
+                                         'team2.club_photo as team2_photo')
+                                ->leftJoin('clubs as team1', 'football_matches.team1_id', 'team1.id')
+                                ->leftJoin('clubs as team2', 'football_matches.team2_id', 'team2.id')
+                                ->where('finished', 1)
+                                ->orderBy('play_date', 'desc')
+                                ->get();
+        $groupedMatches = $matches->groupBy('play_date');
+        return view('users.result.result', compact('groupedMatches'));
     }
 
     // direct user stats page
@@ -182,6 +290,32 @@ class UserController extends Controller
             'gallery_id' => $request->galleryId,
             'user_id' => $request->userId, 
         ];
+    }
+
+    // account validation check
+    private function accountValidationCheck($request){
+        Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required',
+            'image' => 'mimes:png,jpg,jpeg,webp|file',
+        ])->validate();
+    }
+
+    // get user data
+    private function getUserData($request){
+        return [
+            'name' => $request->name,
+            'email' => $request->email,
+        ];
+    }
+
+    // password validation check
+    private function passwordValidationCheck($request){
+        Validator::make($request->all(),[
+            'oldPassword' => 'required|min:6',
+            'newPassword' => 'required|min:6',
+            'confirmPassword' => 'required|min:6|same:newPassword',
+        ])->validate();
     }
 
 }

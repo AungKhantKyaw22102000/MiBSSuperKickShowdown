@@ -120,7 +120,9 @@ Route::middleware(['auth'])->group(function () {
     // User-specific routes
     Route::prefix('user')->middleware(['user_auth'])->group(function(){
         Route::get('profile', [UserController::class, 'profile'])->name('user#profile');
-        Route::post('updateProfile', [UserController::class, 'updateProfile'])->name('user#updateProfile');
+        Route::post('profile/update/{id}', [UserController::class, 'updateProfile'])->name('user#updateProfile');
+        Route::get('profile/change/password', [UserController::class, 'userChangePasswordPage'])->name('user#changePasswordPage');
+        Route::post('profile/change/password', [UserController::class, 'userChangePassword'])->name('user#changePassword');
 
         // user comment routes
         Route::prefix('comment')->group(function(){
@@ -131,7 +133,9 @@ Route::middleware(['auth'])->group(function () {
         // user vote routes
         Route::prefix('vote')->group(function(){
             Route::post('create', [UserController::class, 'createVote'])->name('user#createVote');
+            Route::post('/vote/match/{matchId}', [UserController::class, 'showResults'])->name('user#showResults');
         });
+
     });
 });
 

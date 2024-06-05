@@ -83,7 +83,7 @@
                             <li><a href="{{ route('auth#registerPage') }}">Sign Up</a></li>
                         @endguest
                         @auth
-                            <li><a href="">Settings</a></li>
+                            <li><a href="{{ route('user#profile') }}">Settings</a></li>
                             <li><a href="">Verify Mail</a></li>
                         @endauth
                     </ul>
@@ -107,19 +107,7 @@
     </div>
     <!-- end sidebar -->
 
-    <!-- search -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <form id="player-search-form">
-                <input type="text" id="search-input" placeholder="Search">
-                <button class="button" id="search-button"><i class="fas fa-search"></i></button>
-            </form>
-            <div id="search-results">
-                <!-- Results will be displayed here -->
-            </div>
-        </div>
-    </div>
-    <!-- end search -->
+    @yield('search')
 
     @yield('content');
 
