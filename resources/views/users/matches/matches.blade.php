@@ -125,68 +125,79 @@
 @endsection
 
 @section('scriptSection')
-    <script>
-        $(document).ready(function() {
-            $('.vote-button1, .vote-button2, .vote-button3').click(function() {
-                var vote = $(this).val();
-                var parentNode = $(this).closest('.wrap-content');
-                var matchId = parentNode.find('.matchId').val();
-                var team1Name = parentNode.find('.team1-name').text();
-                var team2Name = parentNode.find('.team2-name').text();
-                if (['team1', 'team2', 'draw'].includes(vote)) {
-                    var data = {
-                        'matchId': matchId,
-                        'vote': vote
-                    };
-                    $.ajax({
-                        type: 'post',
-                        url: '{{ route('user#createVote') }}',
-                        headers: {
-                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: data,
-                        dataType: 'json',
-                        success: function(response) {
-                            console.log(response); // Log the entire response for debugging
-                            showProgressBar(response, matchId, team1Name, team2Name); // Pass team names to showProgressBar function
-                        },
-                        error: function(xhr, status, error) {
+<script>
+    $(document).ready(function() {
+        $('.vote-button1, .vote-button2, .vote-button3').click(function() {
+            var vote = $(this).val();
+            var parentNode = $(this).closest('.wrap-content');
+            var matchId = parentNode.find('.matchId').val();
+            var team1Name = parentNode.find('.team1-name').text();
+            var team2Name = parentNode.find('.team2-name').text();
+            @auth
+                @if(Auth::user()->email_verified_at === null)
+                    alert('You need to verify your email before voting. Check your email inbox for the verification email.');
+                    return;
+                @endif
+            @endauth
+
+            if (['team1', 'team2', 'draw'].includes(vote)) {
+                var data = {
+                    'matchId': matchId,
+                    'vote': vote
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ route('user#createVote') }}',
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response); // Log the entire response for debugging
+                        showProgressBar(response, matchId, team1Name, team2Name); // Pass team names to showProgressBar function
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 403) {
+                            alert('You have already voted for this match today.');
+                        } else {
                             console.error('Error submitting vote:', error);
                             console.log(xhr.responseText);
                         }
-                    });
-                } else {
-                    console.error('Invalid vote selected');
-                }
-            });
-
-            function showProgressBar(response, matchId, team1Name, team2Name) {
-                console.log('Team 1 Name:', team1Name);
-                console.log('Team 2 Name:', team2Name);
-                var totalVotes = response.total;
-                var team1Votes = response.team1;
-                var team2Votes = response.team2;
-                var drawVotes = response.draw;
-
-                // Calculate percentages for each option
-                var team1Percentage = (team1Votes / totalVotes * 100);
-                var drawPercentage = (drawVotes / totalVotes * 100);
-                var team2Percentage = (team2Votes / totalVotes * 100);
-
-                // Update progress bars for the specific match with correct team names
-                $('#progress-bar-team1-' + matchId).css('width', team1Percentage + '%').text(team1Name);
-                $('#progress-bar-draw-' + matchId).css('width', drawPercentage + '%').text('Draw');
-                $('#progress-bar-team2-' + matchId).css('width', team2Percentage + '%').text(team2Name);
-
-                $('#result-container-' + matchId).show(); // Show the result container for this match
+                    }
+                });
+            } else {
+                console.error('Invalid vote selected');
             }
         });
-    </script>
+
+        function showProgressBar(response, matchId, team1Name, team2Name) {
+            console.log('Team 1 Name:', team1Name);
+            console.log('Team 2 Name:', team2Name);
+            var totalVotes = response.total;
+            var team1Votes = response.team1;
+            var team2Votes = response.team2;
+            var drawVotes = response.draw;
+
+            // Calculate percentages for each option
+            var team1Percentage = (team1Votes / totalVotes * 100);
+            var drawPercentage = (drawVotes / totalVotes * 100);
+            var team2Percentage = (team2Votes / totalVotes * 100);
+
+            // Update progress bars for the specific match with correct team names
+            $('#progress-bar-team1-' + matchId).css('width', team1Percentage + '%').text('Upper Team');
+            $('#progress-bar-draw-' + matchId).css('width', drawPercentage + '%').text('Draw');
+            $('#progress-bar-team2-' + matchId).css('width', team2Percentage + '%').text('Lower Team');
+
+            $('#result-container-' + matchId).show(); // Show the result container for this match
+        }
+    });
+</script>
 
     @guest
         <script>
             $(document).ready(function() {
-                $('.vote-button').click(function() {
+                $('.vote-button1, .vote-button2, .vote-button3').click(function() {
                     event.preventDefault();
                     window.location.href = "{{ route('auth#loginPage') }}";
                 })

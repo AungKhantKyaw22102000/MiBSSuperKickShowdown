@@ -118,22 +118,45 @@ class UserController extends Controller
 
     // vote section
     public function createVote(Request $request) {
+        // Check if the user is authenticated and their email is verified
+        if (!Auth::check() || Auth::user()->email_verified_at === null) {
+            return response()->json([
+                'error' => 'You need to verify your email before voting.'
+            ], 403);
+        }
+
         $validatedData = $request->validate([
             'matchId' => 'required|integer',
             'vote' => 'required|string|in:team1,team2,draw',
         ]);
 
+        $userId = Auth::id(); // Assuming user is authenticated
+        $matchId = $request->matchId;
+
+        // Check if the user has already voted for this match today
+        $existingVote = Vote::where('user_id', $userId)
+                            ->where('match_id', $matchId)
+                            ->whereDate('created_at', Carbon::today())
+                            ->first();
+
+        if ($existingVote) {
+            return response()->json([
+                'message' => 'You have already voted for this match today.'
+            ], 403);
+        }
+
+        // Create a new vote
         $vote = new Vote();
-        $vote->user_id = Auth::id(); // Assuming user is authenticated
-        $vote->match_id = $request->matchId;
+        $vote->user_id = $userId;
+        $vote->match_id = $matchId;
         $vote->option = $request->vote;
         $vote->save();
 
         // Get the updated vote counts for the match
-        $totalVotes = Vote::where('match_id', $request->matchId)->count();
-        $team1Votes = Vote::where('match_id', $request->matchId)->where('option', 'team1')->count();
-        $team2Votes = Vote::where('match_id', $request->matchId)->where('option', 'team2')->count();
-        $drawVotes = Vote::where('match_id', $request->matchId)->where('option', 'draw')->count();
+        $totalVotes = Vote::where('match_id', $matchId)->count();
+        $team1Votes = Vote::where('match_id', $matchId)->where('option', 'team1')->count();
+        $team2Votes = Vote::where('match_id', $matchId)->where('option', 'team2')->count();
+        $drawVotes = Vote::where('match_id', $matchId)->where('option', 'draw')->count();
 
         // Return the updated vote counts along with the success message
         return response()->json([
@@ -144,6 +167,7 @@ class UserController extends Controller
             'draw' => $drawVotes,
         ]);
     }
+
 
     // show vote result
     public function showResults($matchId)
