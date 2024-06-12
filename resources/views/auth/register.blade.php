@@ -8,7 +8,7 @@
 		<div class="container">
 			<div class="signup-contents">
 				<h4>Sign Up</h4>
-				<form action='{{ route('register') }}' method='post' enctype='multipart/form-data'>
+				<form action='{{ route('userRegister') }}' method='post' enctype='multipart/form-data'>
 					@csrf
                     <div class="form-group">
                         <label for="">User Name</label>

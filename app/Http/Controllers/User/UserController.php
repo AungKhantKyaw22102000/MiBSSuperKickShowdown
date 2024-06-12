@@ -119,7 +119,7 @@ class UserController extends Controller
     // vote section
     public function createVote(Request $request) {
         // Check if the user is authenticated and their email is verified
-        if (!Auth::check() || Auth::user()->email_verified_at === null) {
+        if (!Auth::check() || Auth::user()->is_verified === 0) {
             return response()->json([
                 'error' => 'You need to verify your email before voting.'
             ], 403);

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('image')->nullable();
             $table->string('role')->default('user');
-            $table->string('is_vefiried')->default(0);
+            $table->string('is_verified')->default(0);
             $table->date('last_vote_date')->nullable();
             $table->integer('vote_match_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();

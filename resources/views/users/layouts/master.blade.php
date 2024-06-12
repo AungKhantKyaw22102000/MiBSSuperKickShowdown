@@ -84,6 +84,9 @@
                         @endguest
                         @auth
                             <li><a href="{{ route('user#profile') }}">Settings</a></li>
+                            @if(Auth::user()->is_verified == 0)
+                                <li><a href="{{ route('auth#verificationPage', Auth::user()->id) }}">Verify Account</a></li>
+                            @endif
                         @endauth
                     </ul>
                 </div>
