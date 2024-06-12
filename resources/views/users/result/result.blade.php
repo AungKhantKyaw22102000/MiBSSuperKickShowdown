@@ -24,7 +24,7 @@
         <div class="container">
             @foreach ($groupedMatches as $date => $matches)
             <div class="wrap-title">
-                <h4>{{ $date }}</h4>
+                <h4>{{ \Carbon\Carbon::parse($date)->format('M-d-Y') }}</h4>
             </div>
 
                 @foreach ($matches as $m)
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 @endforeach
-           
+
             @endforeach
         </div>
     </div>

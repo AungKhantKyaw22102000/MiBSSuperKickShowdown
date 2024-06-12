@@ -8,6 +8,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\FootballMatchController;
+use App\Http\Controllers\ForgotPasswordController;
 
 // Public routes
 Route::get('/', [UserController::class, 'home'])->name('user#homePage');
@@ -40,6 +41,13 @@ Route::get('/stats', [UserController::class, 'statList'])->name('user#statsPage'
 Route::middleware(['guest'])->group(function(){
     Route::get('loginPage', [AuthController::class, 'loginPage'])->name('auth#loginPage');
     Route::get('registerPage', [AuthController::class, 'registerPage'])->name('auth#registerPage');
+    Route::get('forgotPasswordPage', [ForgotPasswordController::class, 'forgotPasswordPage'])->name('auth#forgotPasswordPage');
+    Route::post('forgotPassword', [ForgotPasswordController::class, 'forgotPassword'])->name('auth#forgotPassword');
+    Route::get('reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('auth#resetPassword');
+    Route::post('reset-password', [ForgotPasswordController::class, 'resetPasswordPost'])->name('auth#resetPasswordPost');
+    Route::get('verification/{id}',[AccountVerificationController::class, 'verificationPage'])->name('auth#verificationPage');
+    Route::post('vefiried', [AccountVerificationController::class, 'verifiedOtp'])->name('vefiriedOtp');
+    Route::get('/resend-otp',[AccountVerificationController::class, 'resendOtp'])->name('resendOtp');
 });
 
 // Routes for authenticated users
@@ -108,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('adminUpdate/{id}', [AdminController::class, 'adminUpdate'])->name('admin#update');
             Route::get('adminChangePasswordPage', [AdminController::class, 'adminChangePasswordPage'])->name('admin#changePasswordPage');
             Route::post('adminChangePassword', [AdminController::class, 'adminChangePassword'])->name('admin#changePassword');
+            Route::get('delete/{id}', [AdminController::class, 'adminUserDelete'])->name('admin#adminUserDelete');
         });
 
         // comment

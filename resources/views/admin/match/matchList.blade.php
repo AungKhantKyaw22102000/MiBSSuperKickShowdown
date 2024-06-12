@@ -54,8 +54,8 @@
                                 <img src="{{ asset('storage/clubPhoto/'. $m->team2_photo) }}" alt="{{ $m->tem2_name }}" style="width: 20px; height: 20px;">{{ $m->team2_name }}
                             </a>
                         </td>
-                        <td>{{ $m->play_date }}</td>
-                        <td>{{ $m->play_time }}</td>
+                        <td>{{ \Carbon\Carbon::parse($m->play_date)->format('M-d-Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($m->play_time)->format('g:i A') }}</td>
                         <td>
                             <div class='btn-group'>
                                 <a class='' href='{{ route('admin#footballMatchUpdatePage', $m->id) }}'>

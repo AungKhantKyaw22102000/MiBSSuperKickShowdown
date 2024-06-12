@@ -58,7 +58,7 @@
                                                 <a href='{{ route('user#playerDetail', $player->id) }}'>{{$player->name}}</a>
                                             </h6>
                                             <p>Back Number - {{ $player->back_number }}</p>
-                                            <p>DoB - {{ $player->date_of_birth }}</p>
+                                            <p>DoB - {{ \Carbon\Carbon::parse($player->date_of_birth)->format('M-d-Y') }}</p>
                                         </div>
                                     </div>
                                 </div>

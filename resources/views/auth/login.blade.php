@@ -26,7 +26,7 @@
                                 <p style="color: red">{{ $message }}</p>
                             </div>
                         @enderror
-                        <input type="password" name='password' class="form-control @error('categoryName') is-invalid @enderror" placeholder="Password">
+                        <input type="password" name='password' class="form-control @error('password') is-invalid @enderror" placeholder="Password">
                     </div>
 
                     <button class="button" type='submit'><i class="fa fa-send"></i>Sign in</button>
@@ -34,6 +34,7 @@
 
                 <div class="register-link my-3">
                     <p>
+                        <a href="{{ route('auth#forgotPasswordPage')}}">Forgot Password?</a><br>
                         Don't you have account?
                         <a href="{{ route('auth#registerPage') }}">Sign Up Here</a>
                     </p>
@@ -41,6 +42,5 @@
             </div>
         </div>
     </div>
-
     <!-- end sign in -->
 @endsection

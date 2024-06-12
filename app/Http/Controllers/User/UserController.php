@@ -231,12 +231,17 @@ class UserController extends Controller
                 ->leftjoin('clubs','players.club_id','clubs.id')
                 ->where('players.id',$id)
                 ->first();
-        return view('admin.player.detail', compact('player'));
+        return view('users.players.playerDetail', compact('player'));
     }
 
     // direct user profile route
     public function profile(){
         return view('users.profile.profile');
+    }
+
+    // direct route profile verify
+    public function profileVerify(){
+        return view('auth.verify');
     }
 
     // update profile
@@ -312,7 +317,7 @@ class UserController extends Controller
         return[
             'comment' => $request->commentMessage,
             'gallery_id' => $request->galleryId,
-            'user_id' => $request->userId, 
+            'user_id' => $request->userId,
         ];
     }
 

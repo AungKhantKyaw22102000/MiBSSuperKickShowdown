@@ -16,7 +16,7 @@
                     <option value="all">All Dates</option>
                     @foreach ($paginatedGalleries as $date => $group)
                         <option value="{{ Carbon\Carbon::parse($date)->format('Y-m-d') }}" @if(request('date') == Carbon\Carbon::parse($date)->format('Y-m-d')) selected @endif>
-                            {{ $date }}
+                            {{ \Carbon\Carbon::parse($date)->format('M-d-Y') }}
                         </option>
                     @endforeach
                 </select>
@@ -24,7 +24,7 @@
             <div id="gallery-content">
                 @foreach ($paginatedGalleries as $date => $group)
                     <div class='wrap-title'>
-                        <h4>{{ $date }}</h4>
+                        <h4>{{ \Carbon\Carbon::parse($date)->format('M-d-Y') }}</h4>
                     </div>
                     @foreach ($group as $gallery)
                         <div class='col s6 content'>
@@ -38,7 +38,7 @@
                                 <span>{{ $gallery->sub_header }}</span>
                             </a><br>
                             <span class='formatted-date'>
-                                {{ $gallery->created_at->format('d-M-Y') }}
+                                {{ $gallery->created_at->format('M-d-Y') }}
                             </span><br>
                         </div>
                     @endforeach

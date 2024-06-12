@@ -55,7 +55,7 @@
                         </td>
                         <td>{{ $p->club_name }}</td>
                         <td>{{ $p->back_number}}</td>
-                        <td>{{ $p->date_of_birth }}</td>
+                        <td>{{ \Carbon\Carbon::parse($p->date_of_birth)->format('M-d-Y') }}</td>
                         <td>
                             <div class='btn-group'>
                                 <a class='' href='{{ route('admin#playerUpdatePage', $p->id) }}'>

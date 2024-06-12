@@ -8,13 +8,13 @@
         <div class='container'>
             <div class="row">
                 <div class="col-3 offset-8">
-                    <a href="{{ route('admin#galleryList') }}"><span><i class="fa-solid fa-backward text-dark"></i> Back</span></a>
+                    <a href="{{ route('user#blogPage') }}"><span><i class="fa-solid fa-backward text-dark"></i> Back</span></a>
                 </div>
             </div>
             <div class='wrap-content'>
                 <img src='{{ asset('storage/galleryPhoto/' . $gallery->first_photo) }}' alt='{{ $gallery->header }}'>
                 <h4>{{ $gallery->header }}</h4>
-                <span>{{ $gallery->created_at->format('d-M-Y') }}</span>
+                <span>{{ $gallery->created_at->format('M-d-Y') }}</span>
                 <p>{{ $gallery->briefing }}</p>
                 <p>{{ $gallery->main_text }}</p>
                 <div class='row'>

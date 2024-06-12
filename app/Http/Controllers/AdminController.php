@@ -29,6 +29,16 @@ class AdminController extends Controller
         return view('admin.profile.userList', compact('admin'));
     }
 
+    // admin user delete
+    public function adminUserDelete($id){
+        $user = User::find($id);
+        if($user){
+            Storage::delete('public/userPhoto/' . $user->image);
+            $user->delete();
+        }
+        return back()->with(['deleteSuccess'=>'Selected User is Deleted Successfully...']);
+    }
+
     // change password
     public function adminChangePassword(Request $request){
         $this->passwordValidationCheck($request);

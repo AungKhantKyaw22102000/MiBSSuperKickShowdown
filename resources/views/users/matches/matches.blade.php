@@ -58,7 +58,7 @@
 
             @foreach ($groupedMatches as $date => $matches)
                 <div class="wrap-title">
-                    <h4>{{ $date }}</h4>
+                    <h4>{{ \Carbon\Carbon::parse($date)->format('M-d-Y') }}</h4>
                 </div>
 
                 @foreach ($matches as $m)
@@ -87,7 +87,7 @@
                             <div class='col s4'>
                                 <div class='content-right'>
                                     <ul>
-                                        <li>{{ $m->play_time }}</li>
+                                        <li>{{ \Carbon\Carbon::parse($m->play_time)->format('g:i A') }}</li>
                                     </ul>
                                 </div>
                             </div>

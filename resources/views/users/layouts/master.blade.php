@@ -84,7 +84,6 @@
                         @endguest
                         @auth
                             <li><a href="{{ route('user#profile') }}">Settings</a></li>
-                            <li><a href="">Verify Mail</a></li>
                         @endauth
                     </ul>
                 </div>

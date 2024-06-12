@@ -60,10 +60,7 @@
                         </td>
                         <td>
                             <div class='btn-group'>
-                                <a class='' href=''>
-                                    <i class='fa-solid fa-pen-to-square' title='Update'></i>
-                                </a>
-                                <a class='' href=''>
+                                <a class='' href='{{ route('admin#adminUserDelete', $a->id) }}'>
                                     <i class='fa-solid fa-trash-can' title='Delete'></i>
                                 </a>
                             </div>

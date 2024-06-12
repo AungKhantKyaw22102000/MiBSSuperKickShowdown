@@ -24,7 +24,7 @@
                 <div class='content'>
                     <ul>
                         <li class='stripe'>Club <span>{{ $player->club_name }}</span></li>
-                        <li>DoB  <span>{{ $player->date_of_birth }}</span></li>
+                        <li>DoB  <span>{{ \Carbon\Carbon::parse($player->date_of_birth)->format('M-d-Y') }}</span></li>
                         <li class='stripe'>Back Number <span>{{ $player->back_number }}</span></li>
                     </ul>
                 </div>
