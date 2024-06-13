@@ -38,7 +38,7 @@ Route::get('/result', [UserController::class, 'resultList'])->name('user#resultP
 // statistic routes
 Route::get('/stats', [UserController::class, 'statList'])->name('user#statsPage');
 
-// Login and register routes
+// Login, register, forgot password routes
 Route::middleware(['guest'])->group(function(){
     Route::get('loginPage', [AuthController::class, 'loginPage'])->name('auth#loginPage');
     Route::get('registerPage', [AuthController::class, 'registerPage'])->name('auth#registerPage');

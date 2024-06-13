@@ -261,7 +261,7 @@ class UserController extends Controller
             $data['image'] = $fileName;
         }
         User::where('id',$id)->update($data);
-        return redirect()->route('admin#adminProfile');
+        return redirect()->route('user#profile');
     }
 
     // direct user change password route

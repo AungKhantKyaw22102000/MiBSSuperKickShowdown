@@ -50,15 +50,6 @@
                                     @enderror
                                     <input type="file" name="userPhoto" class="form-control @error('userPhoto') is-invalid @enderror">
                                 </div>
-                                <div class="form-control">
-                                    <label>User Role</label>
-                                    @error('role')
-                                        <div class="invalid-feedback">
-                                            <p style="color: red">{{ $message }}</p>
-                                        </div>
-                                    @enderror
-                                    <input type="text" name="role" class="form-control @error('role') is-invalid @enderror" value="{{ Auth::user()->role }}" disabled>
-                                </div>
                                 <button type="submit" class="button">Save Change</button>
                             </form>
 
